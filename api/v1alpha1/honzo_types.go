@@ -30,6 +30,7 @@ type HonzoSpec struct {
 
 	// Foo is an example field of Honzo. Edit honzo_types.go to remove/update
 	Text string `json:"text,omitempty"`
+	Copies int32 `json:"copies"`
 }
 
 // HonzoStatus defines the observed state of Honzo
