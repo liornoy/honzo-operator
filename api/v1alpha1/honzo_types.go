@@ -29,7 +29,7 @@ type HonzoSpec struct {
 	// Important: Run "make" to regenerate code after modifying this file
 
 	// Foo is an example field of Honzo. Edit honzo_types.go to remove/update
-	Text string `json:"foo,omitempty"`
+	Text string `json:"text,omitempty"`
 }
 
 // HonzoStatus defines the observed state of Honzo
