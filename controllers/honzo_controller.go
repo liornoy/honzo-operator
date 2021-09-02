@@ -18,7 +18,7 @@ package controllers
 
 import (
 	"context"
-
+	"fmt"
 	"k8s.io/apimachinery/pkg/runtime"
 	ctrl "sigs.k8s.io/controller-runtime"
 	"sigs.k8s.io/controller-runtime/pkg/client"
@@ -48,8 +48,15 @@ type HonzoReconciler struct {
 // - https://pkg.go.dev/sigs.k8s.io/controller-runtime@v0.8.3/pkg/reconcile
 func (r *HonzoReconciler) Reconcile(ctx context.Context, req ctrl.Request) (ctrl.Result, error) {
 	_ = log.FromContext(ctx)
-
+	fmt.Println("Reconcile called!!!")
 	// your logic here
+	instance := &mydomainv1alpha1.Honzo{}
+	if err := r.Client.Get(ctx,req.NamespacedName,instance); err != nil {
+		// bad things
+	}
+
+	desired := instance.Spec.Copies
+	
 
 	return ctrl.Result{}, nil
 }

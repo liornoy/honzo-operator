@@ -36,10 +36,15 @@ spec:
           spec:
             description: HonzoSpec defines the desired state of Honzo
             properties:
+              copies:
+                format: int32
+                type: integer
               text:
-                description: Text is an example field of Honzo. Edit honzo_types.go
+                description: Foo is an example field of Honzo. Edit honzo_types.go
                   to remove/update
                 type: string
+            required:
+            - copies
             type: object
           status:
             description: HonzoStatus defines the observed state of Honzo
