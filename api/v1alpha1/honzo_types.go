@@ -28,9 +28,11 @@ type HonzoSpec struct {
 	// INSERT ADDITIONAL SPEC FIELDS - desired state of cluster
 	// Important: Run "make" to regenerate code after modifying this file
 
-	// Foo is an example field of Honzo. Edit honzo_types.go to remove/update
+	// text is the string that honzo prints to the console
 	Text string `json:"text,omitempty"`
-	Copies int32 `json:"copies"`
+
+	// timeout is the duration honzo waits until he prints again
+	TimeOut int32 `json:"timeout"`
 }
 
 // HonzoStatus defines the observed state of Honzo
