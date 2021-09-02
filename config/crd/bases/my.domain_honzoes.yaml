@@ -39,12 +39,6 @@ spec:
               text:
                 description: text is the string that honzo prints to the console
                 type: string
-              timeout:
-                description: timeout is the duration honzo waits until he prints again
-                format: int32
-                type: integer
-            required:
-            - timeout
             type: object
           status:
             description: HonzoStatus defines the observed state of Honzo

@@ -30,9 +30,6 @@ type HonzoSpec struct {
 
 	// text is the string that honzo prints to the console
 	Text string `json:"text,omitempty"`
-
-	// timeout is the duration honzo waits until he prints again
-	TimeOut int32 `json:"timeout"`
 }
 
 // HonzoStatus defines the observed state of Honzo
