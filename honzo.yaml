@@ -1,0 +1,6 @@
+apiVersion: my.domain/v1alpha1
+kind: Honzo
+metadata:
+  name: example-honzo
+spec:
+  text: I am honzo!
