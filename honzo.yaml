@@ -5,5 +5,5 @@ metadata:
   finalizers:
     - my.domain/honzo_finalizer
 spec:
-  text: I am honzo!
-  deleteText: See you later!
+  text: "Honzo says: hello!"
+  deleteText: "Honzo says: goodbye!"
