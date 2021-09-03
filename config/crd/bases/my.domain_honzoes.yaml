@@ -36,6 +36,8 @@ spec:
           spec:
             description: HonzoSpec defines the desired state of Honzo
             properties:
+              deleteText:
+                type: string
               text:
                 description: text is the string that honzo prints to the console
                 type: string

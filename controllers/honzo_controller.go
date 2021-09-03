@@ -23,10 +23,9 @@ import (
 	"k8s.io/apimachinery/pkg/runtime"
 	ctrl "sigs.k8s.io/controller-runtime"
 	"sigs.k8s.io/controller-runtime/pkg/client"
+	"sigs.k8s.io/controller-runtime/pkg/controller/controllerutil"
 	"sigs.k8s.io/controller-runtime/pkg/log"
 	"sigs.k8s.io/controller-runtime/pkg/reconcile"
-	"time"
-
 	mydomainv1alpha1 "honzo-operator/api/v1alpha1"
 )
 
@@ -40,6 +39,12 @@ type HonzoReconciler struct {
 //+kubebuilder:rbac:groups=my.domain,resources=honzoes/status,verbs=get;update;patch
 //+kubebuilder:rbac:groups=my.domain,resources=honzoes/finalizers,verbs=update
 
+
+const (
+
+	FINALIZER_STRING = "my.domain/honzo_finalizer"
+)
+
 // Reconcile is part of the main kubernetes reconciliation loop which aims to
 // move the current state of the cluster closer to the desired state.
 // TODO(user): Modify the Reconcile function to compare the state specified by
@@ -51,10 +56,9 @@ type HonzoReconciler struct {
 // - https://pkg.go.dev/sigs.k8s.io/controller-runtime@v0.8.3/pkg/reconcile
 func (r *HonzoReconciler) Reconcile(ctx context.Context, req ctrl.Request) (ctrl.Result, error) {
 	_ = log.FromContext(ctx)
-
-	// your logic here
 	instance := &mydomainv1alpha1.Honzo{}
-	if err := r.Client.Get(ctx,req.NamespacedName,instance); err != nil {
+	if err := r.Client.Get(ctx, req.NamespacedName, instance); err != nil {
+
 		if errors.IsNotFound(err) {
 			// Request object not found, could have been deleted after reconcile request.
 			// Owned objects are automatically garbage collected. For additional cleanup logic use finalizers.
@@ -64,11 +68,30 @@ func (r *HonzoReconciler) Reconcile(ctx context.Context, req ctrl.Request) (ctrl
 		// Error reading the object - requeue the request.
 		return reconcile.Result{}, err
 	}
-	if instance != nil {
+	// Handle deletion event
+	if !instance.ObjectMeta.DeletionTimestamp.IsZero() {
+		printDeleteMsg(instance)
+		controllerutil.RemoveFinalizer(instance, FINALIZER_STRING)
+		if err := r.Update(context.Background(), instance); err != nil {
+			return ctrl.Result{}, err
+		}
+		return ctrl.Result{}, nil
+	} else {
 		fmt.Println(instance.Spec.Text)
-		return ctrl.Result{RequeueAfter: time.Second * 10}, nil
+	}
+	// Add finalizer for this CR
+	if !controllerutil.ContainsFinalizer(instance, FINALIZER_STRING) {
+		controllerutil.AddFinalizer(instance, FINALIZER_STRING)
+		err := r.Update(context.Background(), instance)
+		if err != nil {
+			return ctrl.Result{}, err
+		}
 	}
 	return ctrl.Result{}, nil
+}
+
+func printDeleteMsg(instance *mydomainv1alpha1.Honzo) {
+	fmt.Println(instance.Spec.DeleteText)
 }
 
 // SetupWithManager sets up the controller with the Manager.
