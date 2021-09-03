@@ -39,9 +39,7 @@ type HonzoReconciler struct {
 //+kubebuilder:rbac:groups=my.domain,resources=honzoes/status,verbs=get;update;patch
 //+kubebuilder:rbac:groups=my.domain,resources=honzoes/finalizers,verbs=update
 
-
 const (
-
 	FINALIZER_STRING = "my.domain/honzo_finalizer"
 )
 
@@ -55,7 +53,7 @@ const (
 // For more details, check Reconcile and its Result here:
 // - https://pkg.go.dev/sigs.k8s.io/controller-runtime@v0.8.3/pkg/reconcile
 func (r *HonzoReconciler) Reconcile(ctx context.Context, req ctrl.Request) (ctrl.Result, error) {
-	logger := log.FromContext(ctx).WithValues("honzo",req.NamespacedName)
+	logger := log.FromContext(ctx).WithValues("honzo", req.NamespacedName)
 	logger.Info("Reconciling honzo resource")
 	instance := &mydomainv1alpha1.Honzo{}
 	if err := r.Client.Get(ctx, req.NamespacedName, instance); err != nil {
@@ -71,11 +69,11 @@ func (r *HonzoReconciler) Reconcile(ctx context.Context, req ctrl.Request) (ctrl
 	}
 	// Handle deletion event
 	if !instance.ObjectMeta.DeletionTimestamp.IsZero() {
-		logger.Info("Deleting Honzo CR", "Name",instance.Name)
+		logger.Info("Deleting Honzo CR", "Name", instance.Name)
 		printDeleteMsg(instance)
 		controllerutil.RemoveFinalizer(instance, FINALIZER_STRING)
 		if err := r.Update(context.Background(), instance); err != nil {
-			logger.Error(err, "Couldn't update Honzo CR","Name",instance.Name)
+			logger.Error(err, "Couldn't update Honzo CR", "Name", instance.Name)
 			return ctrl.Result{}, err
 		}
 		return ctrl.Result{}, nil
@@ -87,7 +85,7 @@ func (r *HonzoReconciler) Reconcile(ctx context.Context, req ctrl.Request) (ctrl
 		controllerutil.AddFinalizer(instance, FINALIZER_STRING)
 		err := r.Update(context.Background(), instance)
 		if err != nil {
-			logger.Error(err, "Couldn't update Honzo CR","Name",instance.Name)
+			logger.Error(err, "Couldn't update Honzo CR", "Name", instance.Name)
 			return ctrl.Result{}, err
 		}
 	}
