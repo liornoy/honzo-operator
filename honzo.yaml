@@ -2,5 +2,8 @@ apiVersion: my.domain/v1alpha1
 kind: Honzo
 metadata:
   name: example-honzo
+  finalizers:
+    - my.domain/honzo_finalizer
 spec:
   text: I am honzo!
+  deleteText: See you later!
