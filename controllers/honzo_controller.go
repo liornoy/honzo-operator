@@ -19,10 +19,12 @@ package controllers
 import (
 	"context"
 	"fmt"
+	"k8s.io/apimachinery/pkg/api/errors"
 	"k8s.io/apimachinery/pkg/runtime"
 	ctrl "sigs.k8s.io/controller-runtime"
 	"sigs.k8s.io/controller-runtime/pkg/client"
 	"sigs.k8s.io/controller-runtime/pkg/log"
+	"sigs.k8s.io/controller-runtime/pkg/reconcile"
 	"time"
 
 	mydomainv1alpha1 "honzo-operator/api/v1alpha1"
@@ -53,7 +55,14 @@ func (r *HonzoReconciler) Reconcile(ctx context.Context, req ctrl.Request) (ctrl
 	// your logic here
 	instance := &mydomainv1alpha1.Honzo{}
 	if err := r.Client.Get(ctx,req.NamespacedName,instance); err != nil {
-		// bad things
+		if errors.IsNotFound(err) {
+			// Request object not found, could have been deleted after reconcile request.
+			// Owned objects are automatically garbage collected. For additional cleanup logic use finalizers.
+			// Return and don't requeue
+			return reconcile.Result{}, nil
+		}
+		// Error reading the object - requeue the request.
+		return reconcile.Result{}, err
 	}
 	if instance != nil {
 		fmt.Println(instance.Spec.Text)
