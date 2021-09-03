@@ -37,9 +37,13 @@ spec:
             description: HonzoSpec defines the desired state of Honzo
             properties:
               deleteText:
+                minLength: 14
+                pattern: Honzo says:+
                 type: string
               text:
                 description: text is the string that honzo prints to the console
+                minLength: 14
+                pattern: Honzo says:+
                 type: string
             type: object
           status:

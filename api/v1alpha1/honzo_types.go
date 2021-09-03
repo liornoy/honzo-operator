@@ -29,8 +29,12 @@ type HonzoSpec struct {
 	// Important: Run "make" to regenerate code after modifying this file
 
 	// text is the string that honzo prints to the console
+	// +kubebuilder:validation:Pattern:="Honzo says:+"
+	// +kubebuilder:validation:MinLength:=14
 	Text string `json:"text,omitempty"`
-	DeleteText string  `json:"deleteText,omitempty"`
+	// +kubebuilder:validation:Pattern:="Honzo says:+"
+	// +kubebuilder:validation:MinLength:=14
+	DeleteText string `json:"deleteText,omitempty"`
 }
 
 // HonzoStatus defines the observed state of Honzo
